@@ -15,7 +15,7 @@ app.use(helmet({
 
 // CORS Configuration
 app.use(cors({
-  origin: '*', // Allows development and staging cross-origin requests
+  origin: true, // Reflects request origin (fixes CORS with credentials)
   credentials: true
 }));
 
