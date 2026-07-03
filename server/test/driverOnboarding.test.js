@@ -9,7 +9,11 @@ const driverController = require('../controllers/driver.controller');
 
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/agrifleet';
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+  console.error('CRITICAL ERROR: MONGO_URI environment variable is missing.');
+  process.exit(1);
+}
 
 // Promise wrapper to wait for wrapped controller executions
 const runController = (controllerFn, req) => {
@@ -24,7 +28,7 @@ const runController = (controllerFn, req) => {
       resolve(res);
       return res;
     };
-    
+
     const next = (err) => {
       if (err) reject(err);
       else resolve(res);
@@ -36,7 +40,7 @@ const runController = (controllerFn, req) => {
 
 const runTests = async () => {
   console.log('--- STARTING AUTOMATED DRIVER ONBOARDING TESTS ---');
-  
+
   try {
     await mongoose.connect(MONGO_URI);
     console.log('Connected to MongoDB.');
@@ -45,7 +49,7 @@ const runTests = async () => {
     const testEmails = ['test_driver1@agrifleet.com', 'test_driver2@agrifleet.com', 'test_driver3@agrifleet.com'];
     const testUsers = await User.find({ email: { $in: testEmails } });
     const testUserIds = testUsers.map(u => u._id);
-    
+
     await Driver.deleteMany({ userId: { $in: testUserIds } });
     await User.deleteMany({ email: { $in: testEmails } });
     console.log('Cleaned previous test users & profiles.');
@@ -97,11 +101,11 @@ const runTests = async () => {
     console.log('\n--- Test Case 2: Driver ID Generation Sequence ---');
     const adminUser = await User.findOne({ role: 'admin' });
     const adminId = adminUser ? adminUser._id : new mongoose.Types.ObjectId();
-    const reqMock = { 
+    const reqMock = {
       user: { _id: adminId },
       params: { id: driver1._id }
     };
-    
+
     const currentYear = new Date().getFullYear();
     console.log(`Current Year for ID generation: ${currentYear}`);
 
@@ -109,7 +113,7 @@ const runTests = async () => {
     const resMock = await runController(driverController.approveDriverApplication, reqMock);
     console.log('Approve response status:', resMock.statusCode);
     console.log('Approve response body message:', resMock.body?.message);
-    
+
     const approvedDriver1 = await Driver.findById(driver1._id);
     console.log(`Generated ID for Driver 1: ${approvedDriver1.driverId}`);
     console.assert(approvedDriver1.driverId && approvedDriver1.driverId.startsWith(`DRV-${currentYear}-`), 'ID prefix is incorrect');
@@ -136,13 +140,13 @@ const runTests = async () => {
       user: { _id: adminId },
       params: { id: driver2._id }
     };
-    
+
     const resMock2 = await runController(driverController.approveDriverApplication, reqMock2);
     console.log('Approve response 2 status:', resMock2.statusCode);
-    
+
     const approvedDriver2 = await Driver.findById(driver2._id);
     console.log(`Generated ID for Driver 2: ${approvedDriver2.driverId}`);
-    
+
     // Check if the numbers incremented correctly
     const num1 = parseInt(approvedDriver1.driverId.split('-')[2], 10);
     const num2 = parseInt(approvedDriver2.driverId.split('-')[2], 10);
@@ -151,7 +155,7 @@ const runTests = async () => {
 
     // 4. Test Operational Gate Protection
     console.log('\n--- Test Case 3: Operational Gate Protection (Pending/Unapproved accounts) ---');
-    
+
     // Create an unapproved driver
     const user3 = await User.create({
       name: 'Test Driver Three',
@@ -169,7 +173,7 @@ const runTests = async () => {
 
     // Mock request from the unapproved driver to get jobs
     const driverReqMock = { user: user3 };
-    
+
     const driverResMock = await runController(driverController.getMyJobs, driverReqMock);
     console.log(`Status Code returned for unapproved driver jobs request: ${driverResMock.statusCode}`);
     console.log(`Response body message: ${driverResMock.body?.message}`);
@@ -180,7 +184,7 @@ const runTests = async () => {
     const allEmails = [...testEmails];
     const cleanupUsers = await User.find({ email: { $in: allEmails } });
     const cleanupUserIds = cleanupUsers.map(u => u._id);
-    
+
     await Driver.deleteMany({ userId: { $in: cleanupUserIds } });
     await DriverBankDetails.deleteMany({ driverId: { $in: [driver1._id, driver2._id, driver3._id] } });
     await DriverDocument.deleteMany({ driverId: { $in: [driver1._id, driver2._id, driver3._id] } });

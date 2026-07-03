@@ -5,7 +5,11 @@ const Farmer = require('./models/Farmer.model');
 const Booking = require('./models/Booking.model');
 const JobRequest = require('./models/JobRequest.model');
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/agrifleet';
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+  console.error('CRITICAL ERROR: MONGO_URI environment variable is missing.');
+  process.exit(1);
+}
 
 const seedDriverData = async () => {
   try {
