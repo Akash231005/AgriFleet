@@ -143,7 +143,7 @@ export default function Login() {
                   placeholder="Enter email or mobile number"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="form-input pl-12 py-3 w-full"
+                  className="form-input !pl-12 !py-3 w-full"
                   required
                 />
               </div>
@@ -160,7 +160,7 @@ export default function Login() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="form-input pl-12 pr-12 py-3 w-full"
+                  className="form-input !pl-12 !pr-12 !py-3 w-full"
                   required
                 />
                 <button
