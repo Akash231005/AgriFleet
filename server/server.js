@@ -23,10 +23,31 @@ connectDB().then(async () => {
       console.log('Production Admin Demo account created securely.');
     }
     const Driver = require('./models/Driver.model');
-    const driverDoc = await Driver.findOne({ phone: '2222222222' });
-    if (driverDoc && driverDoc.approvalStatus !== 'approved') {
-      driverDoc.approvalStatus = 'approved';
-      await driverDoc.save();
+    const corruptedDriver = await User.findOne({ email: 'driver_demo@agrifleet.com' });
+    if (corruptedDriver) {
+      const driverDoc = await Driver.findOne({ userId: corruptedDriver._id });
+      if (!driverDoc || driverDoc.approvalStatus !== 'approved') {
+        if (driverDoc) {
+          await require('./models/DriverBankDetails.model').deleteMany({ driverId: driverDoc._id });
+          await require('./models/DriverApplication.model').deleteMany({ driverId: driverDoc._id });
+          await Driver.deleteMany({ userId: corruptedDriver._id });
+        }
+        await User.deleteOne({ _id: corruptedDriver._id });
+
+        const newDriverUser = await User.create({
+          name: 'Demo Driver', email: 'driver_demo@agrifleet.com', password: 'Password123!', role: 'driver', phone: '9998887777', isActive: true
+        });
+        await Driver.create({
+          userId: newDriverUser._id, phone: '9998887777', gender: 'Male', experienceYears: 5, profileStatus: 'COMPLETE', verificationStatus: 'VERIFIED', isApproved: true, approvalStatus: 'approved'
+        });
+      }
+    } else {
+      const newDriverUser = await User.create({
+        name: 'Demo Driver', email: 'driver_demo@agrifleet.com', password: 'Password123!', role: 'driver', phone: '9998887777', isActive: true
+      });
+      await Driver.create({
+        userId: newDriverUser._id, phone: '9998887777', gender: 'Male', experienceYears: 5, profileStatus: 'COMPLETE', verificationStatus: 'VERIFIED', isApproved: true, approvalStatus: 'approved'
+      });
     }
   } catch (err) {
     console.error('Failed to auto-seed admin:', err);
