@@ -22,6 +22,12 @@ connectDB().then(async () => {
       });
       console.log('Production Admin Demo account created securely.');
     }
+    const Driver = require('./models/Driver.model');
+    const driverDoc = await Driver.findOne({ phone: '2222222222' });
+    if (driverDoc && driverDoc.approvalStatus !== 'approved') {
+      driverDoc.approvalStatus = 'approved';
+      await driverDoc.save();
+    }
   } catch (err) {
     console.error('Failed to auto-seed admin:', err);
   }
