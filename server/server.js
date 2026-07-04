@@ -6,7 +6,26 @@ const app = require('./app');
 dotenv.config();
 
 // Connect to MongoDB Database
-connectDB();
+connectDB().then(async () => {
+  // Production safe admin seeder
+  try {
+    const User = require('./models/User.model');
+    const adminExists = await User.findOne({ role: 'admin' });
+    if (!adminExists) {
+      await User.create({
+        name: 'Demo Admin',
+        email: 'admin_demo@agrifleet.com',
+        password: 'Password123!',
+        role: 'admin',
+        phone: '3333333333',
+        isActive: true
+      });
+      console.log('Production Admin Demo account created securely.');
+    }
+  } catch (err) {
+    console.error('Failed to auto-seed admin:', err);
+  }
+});
 
 const requiredEnv = ['NODE_ENV', 'MONGO_URI', 'JWT_SECRET', 'JWT_EXPIRE', 'PORT'];
 for (const env of requiredEnv) {

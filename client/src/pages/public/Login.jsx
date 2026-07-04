@@ -196,7 +196,7 @@ export default function Login() {
           <div className="flex items-center gap-1.5 text-green-700 font-bold text-[10px] uppercase tracking-wider">
             💡 Demo Accounts
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Farmer Demo */}
             <div className="bg-white rounded-xl p-3 border border-gray-200 relative group text-xs shadow-sm hover:border-green-300 transition-colors">
               <div className="flex items-center gap-1 mb-2 font-bold text-gray-800 text-sm">
@@ -204,14 +204,14 @@ export default function Login() {
               </div>
               <div className="text-gray-500 space-y-1">
                 <div className="flex justify-between items-center bg-gray-50 px-2 py-1.5 rounded">
-                  <span className="font-medium">farmer_test@agrifleet.com</span>
-                  <button type="button" onClick={() => navigator.clipboard.writeText('farmer_test@agrifleet.com')} className="text-green-600 hover:text-green-800 transition-colors" title="Copy Email">
+                  <span className="font-medium truncate">farmer_demo@agrifleet.com</span>
+                  <button type="button" onClick={() => navigator.clipboard.writeText('farmer_demo@agrifleet.com')} className="text-green-600 hover:text-green-800 transition-colors ml-1" title="Copy Email">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                   </button>
                 </div>
                 <div className="flex justify-between items-center bg-gray-50 px-2 py-1.5 rounded">
-                  <span>Password123</span>
-                  <button type="button" onClick={() => navigator.clipboard.writeText('Password123')} className="text-green-600 hover:text-green-800 transition-colors" title="Copy Password">
+                  <span>Password123!</span>
+                  <button type="button" onClick={() => navigator.clipboard.writeText('Password123!')} className="text-green-600 hover:text-green-800 transition-colors ml-1" title="Copy Password">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                   </button>
                 </div>
@@ -224,14 +224,34 @@ export default function Login() {
               </div>
               <div className="text-gray-500 space-y-1">
                 <div className="flex justify-between items-center bg-gray-50 px-2 py-1.5 rounded">
-                  <span className="font-medium">9876543210</span>
-                  <button type="button" onClick={() => navigator.clipboard.writeText('9876543210')} className="text-green-600 hover:text-green-800 transition-colors" title="Copy Mobile">
+                  <span className="font-medium truncate">driver_demo@agrifleet.com</span>
+                  <button type="button" onClick={() => navigator.clipboard.writeText('driver_demo@agrifleet.com')} className="text-green-600 hover:text-green-800 transition-colors ml-1" title="Copy Email">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                   </button>
                 </div>
                 <div className="flex justify-between items-center bg-gray-50 px-2 py-1.5 rounded">
-                  <span>Password123</span>
-                  <button type="button" onClick={() => navigator.clipboard.writeText('Password123')} className="text-green-600 hover:text-green-800 transition-colors" title="Copy Password">
+                  <span>Password123!</span>
+                  <button type="button" onClick={() => navigator.clipboard.writeText('Password123!')} className="text-green-600 hover:text-green-800 transition-colors ml-1" title="Copy Password">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* Admin Demo */}
+            <div className="bg-white rounded-xl p-3 border border-gray-200 relative group text-xs shadow-sm hover:border-green-300 transition-colors">
+              <div className="flex items-center gap-1 mb-2 font-bold text-gray-800 text-sm">
+                👨💼 Admin Demo
+              </div>
+              <div className="text-gray-500 space-y-1">
+                <div className="flex justify-between items-center bg-gray-50 px-2 py-1.5 rounded">
+                  <span className="font-medium truncate">admin_demo@agrifleet.com</span>
+                  <button type="button" onClick={() => navigator.clipboard.writeText('admin_demo@agrifleet.com')} className="text-green-600 hover:text-green-800 transition-colors ml-1" title="Copy Email">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  </button>
+                </div>
+                <div className="flex justify-between items-center bg-gray-50 px-2 py-1.5 rounded">
+                  <span>Password123!</span>
+                  <button type="button" onClick={() => navigator.clipboard.writeText('Password123!')} className="text-green-600 hover:text-green-800 transition-colors ml-1" title="Copy Password">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                   </button>
                 </div>
