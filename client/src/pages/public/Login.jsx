@@ -135,15 +135,15 @@ export default function Login() {
             <div>
               <label className="form-label">Email or Mobile Number</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  {username.includes('@') || !/^\d*$/.test(username) ? <Mail size={16} /> : <Phone size={16} />}
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center">
+                  {username.includes('@') || !/^\d*$/.test(username) ? <Mail size={18} /> : <Phone size={18} />}
                 </span>
                 <input
                   type="text"
                   placeholder="Enter email or mobile number"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="form-input pl-10"
+                  className="form-input pl-12 py-3 w-full"
                   required
                 />
               </div>
@@ -152,23 +152,23 @@ export default function Login() {
             <div>
               <label className="form-label">Password</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  <Lock size={16} />
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center">
+                  <Lock size={18} />
                 </span>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="form-input pl-10 pr-10"
+                  className="form-input pl-12 pr-12 py-3 w-full"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors flex items-center p-1"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
