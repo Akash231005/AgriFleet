@@ -37,7 +37,7 @@ const seedData = async () => {
       role: 'admin',
       phone: '9999999999'
     });
-    console.log('Admin account created (admin@agrifleet.com / Password123).');
+    console.log('Admin account created.');
 
     // 3. Create Drivers
     const driver1User = await User.create({
