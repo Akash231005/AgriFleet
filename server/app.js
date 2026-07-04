@@ -48,6 +48,13 @@ app.use('/api/v1/analytics', require('./routes/analytics.routes'));
 app.use('/api/driver/auth', require('./routes/driverAuth'));
 app.use('/api/driver/dashboard', require('./routes/driverDashboard'));
 
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "AgriFleet Backend API is running 🚜"
+  });
+});
+
 // Health Check API
 app.get('/health', (req, res) => {
   res.status(200).json({ success: true, message: 'Server is healthy.', timestamp: new Date() });
