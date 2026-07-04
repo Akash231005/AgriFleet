@@ -325,10 +325,10 @@ const registerDriver = asyncWrapper(async (req, res) => {
   // Create Driver Application entry
   await DriverApplication.create({
     driverId: driver._id,
-    status: 'INCOMPLETE',
+    status: 'PENDING_APPROVAL',
     history: [
       {
-        status: 'INCOMPLETE',
+        status: 'PENDING_APPROVAL',
         comments: 'Application started. Pending profile completion and documents.',
         updatedAt: new Date()
       }
