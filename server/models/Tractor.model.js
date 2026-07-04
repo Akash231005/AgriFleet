@@ -24,7 +24,6 @@ const TractorSchema = new mongoose.Schema({
 });
 
 TractorSchema.index({ status: 1 });
-TractorSchema.index({ registrationNo: 1 });
 TractorSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Tractor', TractorSchema);

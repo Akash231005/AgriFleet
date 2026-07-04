@@ -14,8 +14,8 @@ const authenticateDriver = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'agrifleet_jwt_secret_dev');
-    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     // Find the associated driver by userId first (single auth source), fallback to _id
     let driver = await Driver.findOne({ userId: decoded.id });
     if (!driver) {

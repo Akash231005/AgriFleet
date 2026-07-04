@@ -37,7 +37,7 @@ const loginDriver = asyncWrapper(async (req, res) => {
   // Generate JWT token (expires in 7 days)
   const token = jwt.sign(
     { id: driver._id, role: 'driver' },
-    process.env.JWT_SECRET || 'agrifleet_jwt_secret_dev',
+    process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
 

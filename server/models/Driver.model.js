@@ -45,10 +45,10 @@ const DriverSchema = new mongoose.Schema({
   profileStatus: { type: String, enum: ['INCOMPLETE', 'COMPLETE'], default: 'INCOMPLETE' },
   verificationStatus: { type: String, enum: ['PENDING_DOCUMENTS', 'UNDER_REVIEW', 'VERIFIED', 'REJECTED'], default: 'PENDING_DOCUMENTS' },
   isApproved: { type: Boolean, default: false },
-  approvalStatus: { 
-    type: String, 
-    enum: ['INCOMPLETE', 'PENDING_DOCUMENTS', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'SUSPENDED', 'PENDING_APPROVAL'], 
-    default: 'INCOMPLETE' 
+  approvalStatus: {
+    type: String,
+    enum: ['INCOMPLETE', 'PENDING_DOCUMENTS', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'SUSPENDED', 'PENDING_APPROVAL'],
+    default: 'INCOMPLETE'
   },
   rejectionReason: { type: String },
   rejectionHistory: [
@@ -60,7 +60,7 @@ const DriverSchema = new mongoose.Schema({
   documentRequestComments: { type: String }
 });
 
-DriverSchema.pre('save', async function(next) {
+DriverSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   try {
     const salt = await bcrypt.genSalt(10);
@@ -71,15 +71,13 @@ DriverSchema.pre('save', async function(next) {
   }
 });
 
-DriverSchema.methods.comparePassword = async function(candidatePassword) {
+DriverSchema.methods.comparePassword = async function (candidatePassword) {
   if (!this.password) return false;
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-DriverSchema.index({ userId: 1 });
 DriverSchema.index({ status: 1 });
 DriverSchema.index({ approvalStatus: 1 });
-DriverSchema.index({ driverId: 1 });
 DriverSchema.index({ currentLocation: '2dsphere' });
 
 module.exports = mongoose.model('Driver', DriverSchema);

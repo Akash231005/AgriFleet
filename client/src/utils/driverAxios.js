@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+if (!apiUrl) throw new Error('VITE_API_URL environment variable is missing.');
+
 const driverAxios = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL || 'https://agrifleet.onrender.com'}/api/driver`,
+  baseURL: `${apiUrl}/api/driver`,
   timeout: 10000,
 });
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  User, CheckCircle2, AlertCircle, Phone, Landmark, 
-  ShieldAlert, RefreshCw, Upload, FileText, ExternalLink 
+import {
+  User, CheckCircle2, AlertCircle, Phone, Landmark,
+  ShieldAlert, RefreshCw, Upload, FileText, ExternalLink
 } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import API from '../../utils/api';
@@ -131,7 +131,10 @@ export default function DriverProfile() {
 
   const { user, driver, documents } = profile;
   const isApproved = driver.approvalStatus === 'APPROVED';
-  const mediaBaseUrl = import.meta.env.VITE_API_MEDIA_URL || 'http://localhost:5000';
+  const mediaBaseUrl = import.meta.env.VITE_API_MEDIA_URL;
+  if (!mediaBaseUrl) {
+    throw new Error('VITE_API_MEDIA_URL environment variable is missing. Check your .env file.');
+  }
 
   return (
     <PageWrapper>
@@ -157,7 +160,7 @@ export default function DriverProfile() {
 
       {/* Success/Error alert */}
       {successMsg && (
-        <div 
+        <div
           className="flex items-center gap-2.5 p-4 rounded-xl text-sm"
           style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)', color: '#22C55E' }}
         >
@@ -167,7 +170,7 @@ export default function DriverProfile() {
       )}
 
       {errorMsg && (
-        <div 
+        <div
           className="flex items-center gap-2.5 p-4 rounded-xl text-sm"
           style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444' }}
         >
@@ -178,7 +181,7 @@ export default function DriverProfile() {
 
       {/* Grid container */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        
+
         {/* Left Column: Account Details (Update details) */}
         <div className="lg:col-span-2 space-y-6">
           <div className="card p-6" style={{ background: '#0B132B', border: '1px solid #1E293B' }}>
@@ -186,10 +189,10 @@ export default function DriverProfile() {
               <h2 className="font-bold text-white text-sm uppercase tracking-wider flex items-center gap-2">
                 <User size={15} className="text-emerald-500" /> Account Profile
               </h2>
-              <span 
+              <span
                 className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider"
-                style={{ 
-                  background: isApproved ? 'rgba(34,197,94,0.1)' : 'rgba(245,158,11,0.1)', 
+                style={{
+                  background: isApproved ? 'rgba(34,197,94,0.1)' : 'rgba(245,158,11,0.1)',
                   color: isApproved ? '#22C55E' : '#F59E0B',
                   border: isApproved ? '1px solid rgba(34,197,94,0.2)' : '1px solid rgba(245,158,11,0.2)'
                 }}
@@ -199,7 +202,7 @@ export default function DriverProfile() {
             </div>
 
             <form onSubmit={handleUpdate} className="space-y-4">
-              
+
               {/* Profile metadata info */}
               <div className="grid grid-cols-2 gap-4 text-xs bg-slate-950/40 p-4 rounded-xl border border-slate-900">
                 <div>
@@ -228,7 +231,7 @@ export default function DriverProfile() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="form-label">Phone Number *</label>
-                  <input 
+                  <input
                     type="tel"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
@@ -238,7 +241,7 @@ export default function DriverProfile() {
                 </div>
                 <div>
                   <label className="form-label">Emergency Contact *</label>
-                  <input 
+                  <input
                     type="tel"
                     value={emergencyContact}
                     onChange={e => setEmergencyContact(e.target.value)}
@@ -258,7 +261,7 @@ export default function DriverProfile() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="form-label">Account Holder *</label>
-                  <input 
+                  <input
                     type="text"
                     value={bank.accountHolderName}
                     onChange={e => setBank({ ...bank, accountHolderName: e.target.value })}
@@ -268,7 +271,7 @@ export default function DriverProfile() {
                 </div>
                 <div>
                   <label className="form-label">Bank Name *</label>
-                  <input 
+                  <input
                     type="text"
                     value={bank.bankName}
                     onChange={e => setBank({ ...bank, bankName: e.target.value })}
@@ -278,7 +281,7 @@ export default function DriverProfile() {
                 </div>
                 <div>
                   <label className="form-label">Account Number *</label>
-                  <input 
+                  <input
                     type="text"
                     value={bank.accountNumber}
                     onChange={e => setBank({ ...bank, accountNumber: e.target.value })}
@@ -288,7 +291,7 @@ export default function DriverProfile() {
                 </div>
                 <div>
                   <label className="form-label">IFSC Code *</label>
-                  <input 
+                  <input
                     type="text"
                     value={bank.ifscCode}
                     onChange={e => setBank({ ...bank, ifscCode: e.target.value.toUpperCase() })}
@@ -298,7 +301,7 @@ export default function DriverProfile() {
                 </div>
                 <div className="col-span-2">
                   <label className="form-label">UPI ID (Optional)</label>
-                  <input 
+                  <input
                     type="text"
                     value={bank.upiId}
                     onChange={e => setBank({ ...bank, upiId: e.target.value })}
@@ -307,8 +310,8 @@ export default function DriverProfile() {
                 </div>
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={updating}
                 className="btn-primary w-full justify-center mt-2"
                 style={{ padding: '0.75rem' }}
@@ -336,7 +339,7 @@ export default function DriverProfile() {
               {MANDATORY_DOCS.map(doc => {
                 const docRecord = documents.find(d => d.documentType === doc.key);
                 return (
-                  <div 
+                  <div
                     key={doc.key}
                     className="p-3.5 rounded-xl bg-slate-950/40 border border-slate-900 flex justify-between items-center gap-3 text-xs"
                   >
@@ -346,18 +349,18 @@ export default function DriverProfile() {
                       </span>
                       {docRecord ? (
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span 
+                          <span
                             className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded"
-                            style={{ 
+                            style={{
                               background: docRecord.status === 'approved' ? 'rgba(34,197,94,0.1)' : 'rgba(245,158,11,0.1)',
                               color: docRecord.status === 'approved' ? '#22C55E' : '#F59E0B'
                             }}
                           >
                             {docRecord.status}
                           </span>
-                          <a 
-                            href={`${mediaBaseUrl}${docRecord.fileUrl}`} 
-                            target="_blank" 
+                          <a
+                            href={`${mediaBaseUrl}${docRecord.fileUrl}`}
+                            target="_blank"
                             rel="noreferrer"
                             className="text-[10px] text-emerald-500 hover:underline inline-flex items-center gap-0.5"
                           >
@@ -371,11 +374,11 @@ export default function DriverProfile() {
 
                     <label className="p-2 bg-slate-900 border border-slate-800 hover:border-emerald-500 hover:text-white rounded-lg cursor-pointer transition-colors text-slate-400">
                       <Upload size={12} />
-                      <input 
-                        type="file" 
+                      <input
+                        type="file"
                         accept="image/*,application/pdf"
                         onChange={(e) => handleDocumentRenew(e, doc.key)}
-                        className="hidden" 
+                        className="hidden"
                         disabled={updating}
                       />
                     </label>

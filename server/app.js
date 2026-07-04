@@ -15,7 +15,7 @@ app.use(helmet({
 
 // CORS Configuration
 app.use(cors({
-  origin: true, // Reflects request origin (fixes CORS with credentials)
+  origin: ['http://localhost:5173', 'https://agrifleetfrontend.vercel.app'],
   credentials: true
 }));
 
@@ -30,6 +30,15 @@ app.use('/api/', limiter);
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+
+// Data Sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data Sanitization against XSS
+app.use(xss());
 
 // Logging
 app.use(morgan('dev'));
@@ -51,7 +60,8 @@ app.use('/api/driver/dashboard', require('./routes/driverDashboard'));
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "AgriFleet Backend API is running 🚜"
+    message: "AgriFleet Backend API is running",
+    version: "1.0.0"
   });
 });
 

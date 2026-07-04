@@ -13,8 +13,8 @@ const asyncWrapper = require('../utils/asyncWrapper');
 const generateToken = (id, role) => {
   return jwt.sign(
     { id, role },
-    process.env.JWT_SECRET || 'agrifleet_jwt_secret_dev',
-    { expiresIn: process.env.JWT_EXPIRE || '7d' }
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRE }
   );
 };
 
@@ -190,7 +190,7 @@ const login = asyncWrapper(async (req, res) => {
 // @access  Private
 const getMe = asyncWrapper(async (req, res) => {
   const user = req.user;
-  
+
   let profile = null;
   if (user.role === 'farmer') {
     profile = await Farmer.findOne({ userId: user._id });

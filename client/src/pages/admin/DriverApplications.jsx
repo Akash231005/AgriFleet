@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  CheckCircle2, AlertCircle, X, ShieldAlert, Eye, 
-  Search, ShieldCheck, HelpCircle, FileText, Download, UserCheck, Ban 
+import {
+  CheckCircle2, AlertCircle, X, ShieldAlert, Eye,
+  Search, ShieldCheck, HelpCircle, FileText, Download, UserCheck, Ban
 } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import API from '../../utils/api';
@@ -11,11 +11,11 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
-  
+
   // Action states
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [rejectionReason, setRejectionReason] = useState('');
-  
+
   const [showRequestDocsForm, setShowRequestDocsForm] = useState(false);
   const [requestComments, setRequestComments] = useState('');
 
@@ -119,12 +119,15 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
   const isSuspended = driver.approvalStatus === 'SUSPENDED';
 
   // Base URL for serving static media from backend
-  const mediaBaseUrl = import.meta.env.VITE_API_MEDIA_URL || 'http://localhost:5000';
+  const mediaBaseUrl = import.meta.env.VITE_API_MEDIA_URL;
+  if (!mediaBaseUrl) {
+    throw new Error('VITE_API_MEDIA_URL environment variable is missing. Check your .env file.');
+  }
 
   return (
     <div className="modal-overlay">
       <div className="modal-card" style={{ maxWidth: '64rem', width: '100%', height: '90vh', display: 'flex', flexDirection: 'col', padding: 0, overflow: 'hidden' }}>
-        
+
         {/* Modal Header */}
         <div className="px-6 py-4 flex items-center justify-between border-b" style={{ borderColor: '#E5E7EB', background: '#F9FAFB' }}>
           <div className="flex items-center gap-3">
@@ -147,10 +150,10 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
 
         {/* Modal Body (Scrollable Split Pane) */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-          
+
           {/* Left Panel: Profile Details */}
           <div className="flex-1 p-6 overflow-y-auto space-y-6 border-r" style={{ borderColor: '#E5E7EB' }}>
-            
+
             {/* Personal Info */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 border-b pb-1" style={{ borderColor: '#E5E7EB' }}>Personal Profile</h3>
@@ -311,7 +314,7 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
             <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 border-b pb-2 mb-4" style={{ borderColor: '#E5E7EB' }}>
               Document Verification Panel
             </h3>
-            
+
             {/* List of uploaded documents */}
             <div className="flex gap-2 pb-3 overflow-x-auto select-none border-b mb-4" style={{ borderColor: '#E5E7EB' }}>
               {documents && documents.length > 0 ? (
@@ -343,9 +346,9 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
               <div className="flex-1 flex flex-col overflow-hidden space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold text-gray-900 uppercase">{selectedDoc.documentType?.replace('_', ' ')}</span>
-                  <a 
-                    href={`${mediaBaseUrl}${selectedDoc.fileUrl}`} 
-                    target="_blank" 
+                  <a
+                    href={`${mediaBaseUrl}${selectedDoc.fileUrl}`}
+                    target="_blank"
                     rel="noreferrer"
                     className="flex items-center gap-1 hover:underline font-semibold"
                     style={{ color: '#15803D' }}
@@ -356,13 +359,13 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
 
                 <div className="flex-1 bg-white border rounded-xl overflow-hidden relative flex items-center justify-center" style={{ borderColor: '#E5E7EB' }}>
                   {selectedDoc.fileUrl?.endsWith('.pdf') ? (
-                    <iframe 
+                    <iframe
                       src={`${mediaBaseUrl}${selectedDoc.fileUrl}`}
                       className="w-full h-full"
                       title="PDF Doc Preview"
                     />
                   ) : (
-                    <img 
+                    <img
                       src={`${mediaBaseUrl}${selectedDoc.fileUrl}`}
                       alt={selectedDoc.documentType}
                       className="max-w-full max-h-full object-contain"
@@ -381,7 +384,7 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
 
         {/* Modal Actions Footer */}
         <div className="px-6 py-4 border-t flex flex-wrap gap-3 justify-end items-center" style={{ borderColor: '#E5E7EB', background: '#F9FAFB' }}>
-          
+
           {/* Default Actions */}
           {!showRejectForm && !showRequestDocsForm && (
             <>
@@ -457,17 +460,17 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
                 />
               </div>
               <div className="flex gap-2">
-                <button 
-                  type="button" 
-                  onClick={() => setShowRequestDocsForm(false)} 
+                <button
+                  type="button"
+                  onClick={() => setShowRequestDocsForm(false)}
                   className="btn-secondary"
                   style={{ padding: '0.55rem 1rem', fontSize: '0.8rem' }}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  disabled={actionLoading} 
+                <button
+                  type="submit"
+                  disabled={actionLoading}
                   className="btn-primary"
                   style={{ background: 'linear-gradient(135deg, #d97706, #b45309)', padding: '0.6rem 1.25rem', fontSize: '0.8rem' }}
                 >
@@ -492,17 +495,17 @@ function ApplicationModal({ applicantId, onClose, onRefresh }) {
                 />
               </div>
               <div className="flex gap-2">
-                <button 
-                  type="button" 
-                  onClick={() => setShowRejectForm(false)} 
+                <button
+                  type="button"
+                  onClick={() => setShowRejectForm(false)}
                   className="btn-secondary"
                   style={{ padding: '0.55rem 1rem', fontSize: '0.8rem' }}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  disabled={actionLoading} 
+                <button
+                  type="submit"
+                  disabled={actionLoading}
                   className="btn-primary"
                   style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', padding: '0.6rem 1.25rem', fontSize: '0.8rem' }}
                 >
@@ -682,10 +685,10 @@ export default function DriverApplications() {
 
       {/* Review details modal */}
       {reviewId && (
-        <ApplicationModal 
-          applicantId={reviewId} 
-          onClose={() => setReviewId(null)} 
-          onRefresh={loadApplicants} 
+        <ApplicationModal
+          applicantId={reviewId}
+          onClose={() => setReviewId(null)}
+          onRefresh={loadApplicants}
         />
       )}
 

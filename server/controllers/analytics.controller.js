@@ -16,30 +16,25 @@ const getOperationalSummary = asyncWrapper(async (req, res) => {
   const endOfDay = new Date();
   endOfDay.setUTCHours(23, 59, 59, 999);
 
-  // 1. Today's Bookings
-  const todayBookingsCount = await Booking.countDocuments({
-    scheduledDate: { $gte: startOfDay, $lte: endOfDay }
-  });
+  // Parallelize sequential database queries
+  const [
+    todayBookingsCount,
+    activeJobsCount,
+    todayCompleted,
+    totalTractors,
+    availableTractors,
+    totalFarmers,
+    totalDrivers
+  ] = await Promise.all([
+    Booking.countDocuments({ scheduledDate: { $gte: startOfDay, $lte: endOfDay } }),
+    Booking.countDocuments({ status: 'in_progress' }),
+    Booking.find({ status: 'completed', completedAt: { $gte: startOfDay, $lte: endOfDay } }),
+    Tractor.countDocuments({ isActive: true }),
+    Tractor.countDocuments({ status: 'available', isActive: true }),
+    User.countDocuments({ role: 'farmer' }),
+  ]);
 
-  // 2. Active Jobs
-  const activeJobsCount = await Booking.countDocuments({
-    status: 'in_progress'
-  });
-
-  // 3. Revenue Today
-  const todayCompleted = await Booking.find({
-    status: 'completed',
-    completedAt: { $gte: startOfDay, $lte: endOfDay }
-  });
   const revenueToday = todayCompleted.reduce((sum, b) => sum + (b.actualCost || b.estimatedCost || 0), 0);
-
-  // 4. Fleet Available
-  const totalTractors = await Tractor.countDocuments({ isActive: true });
-  const availableTractors = await Tractor.countDocuments({ status: 'available', isActive: true });
-
-  // 5. General stats
-  const totalFarmers = await User.countDocuments({ role: 'farmer' });
-  const totalDrivers = await Driver.countDocuments();
 
   return success(res, {
     todayBookings: todayBookingsCount,
@@ -83,13 +78,21 @@ const getRevenueStats = asyncWrapper(async (req, res) => {
 // @route   GET /api/v1/analytics/fleet
 // @access  Private (Admin / Fleet Manager)
 const getFleetUtilization = asyncWrapper(async (req, res) => {
-  const available = await Tractor.countDocuments({ status: 'available', isActive: true });
-  const onJob = await Tractor.countDocuments({ status: 'on_job', isActive: true });
-  const maintenance = await Tractor.countDocuments({ status: 'maintenance', isActive: true });
-  const inactive = await Tractor.countDocuments({ status: 'inactive', isActive: true });
-
-  const attachmentsAvailable = await Attachment.countDocuments({ status: 'available', isActive: true });
-  const attachmentsInUse = await Attachment.countDocuments({ status: 'in_use', isActive: true });
+  const [
+    available,
+    onJob,
+    maintenance,
+    inactive,
+    attachmentsAvailable,
+    attachmentsInUse
+  ] = await Promise.all([
+    Tractor.countDocuments({ status: 'available', isActive: true }),
+    Tractor.countDocuments({ status: 'on_job', isActive: true }),
+    Tractor.countDocuments({ status: 'maintenance', isActive: true }),
+    Tractor.countDocuments({ status: 'inactive', isActive: true }),
+    Attachment.countDocuments({ status: 'available', isActive: true }),
+    Attachment.countDocuments({ status: 'in_use', isActive: true })
+  ]);
 
   return success(res, {
     tractors: {

@@ -25,7 +25,7 @@ export const registerFarmer = createAsyncThunk(
       return { user, profile: farmer };
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Validation details:', err.response?.data);
+
       }
       return rejectWithValue({
         message: err.response?.data?.message || 'Registration failed.',
@@ -45,7 +45,7 @@ export const registerDriver = createAsyncThunk(
       return { user, profile };
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Validation details:', err.response?.data);
+
       }
       return rejectWithValue({
         message: err.response?.data?.message || 'Driver registration failed.',
